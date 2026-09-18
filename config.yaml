@@ -1,0 +1,28 @@
+scraper:
+  url: "https://mon-vie-via.businessfrance.fr/offres"
+  filters:
+    zones:
+      - "AMERIQUE DU NORD"
+      - "ASIE ET PACIFIQUE"
+    domaines:
+      - "INFORMATIQUE SCIENTIFIQUE ET INDUSTRIELLE"
+      - "SYSTEMES ET LOGICIELS INFORMATIQUES"
+    type: "VIE"
+    niveau: "Bac+5 et plus"
+  headless: true
+  browser: "edge"
+  page_load_timeout: 30
+  delay_between_pages: 3
+
+storage:
+  db_path: "offers.db"
+  notify_on_first_run: false  # empty DB -> record current offers silently
+
+notifications:
+  telegram:
+    enabled: true
+    token: ""  # set via TELEGRAM_TOKEN env var
+    chat_id: ""  # set via TELEGRAM_CHAT_ID env var
+  obsidian:
+    enabled: false
+    file_path: "./offres_vie.md"  # e.g. a note inside your Obsidian vault

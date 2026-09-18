@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime state (persisted via GitHub Actions cache in CI)
+offers.db
+offres_vie.md
+debug_*.html
+debug_*.png
+
+# Local config with personal paths / credentials (use --config config.local.yaml)
+config.local.yaml
+*.local.yaml
+.env

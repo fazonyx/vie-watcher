@@ -1,0 +1,53 @@
+name: VIE Watcher
+
+on:
+  schedule:
+    - cron: "3 8 * * 1-5"   # 10h03 Paris (UTC+2) weekdays
+    - cron: "17 10 * * 1-5" # 12h17 Paris
+    - cron: "42 13 * * 1-5" # 15h42 Paris
+    - cron: "7 16 * * 1-5"  # 18h07 Paris
+  workflow_dispatch: {}      # Manual trigger from GitHub UI
+
+permissions:
+  contents: read
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      # The SQLite database of already-seen offers lives in the Actions cache:
+      # restore the most recent one, run, then save it under a new key.
+      - name: Restore offers database
+        uses: actions/cache/restore@v4
+        with:
+          path: offers.db
+          key: offers-db-${{ github.run_id }}
+          restore-keys: offers-db-
+
+      - name: Run VIE watcher
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py --config config.ci.yaml
+
+      - name: Save offers database
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: offers.db
+          key: offers-db-${{ github.run_id }}

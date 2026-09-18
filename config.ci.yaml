@@ -1,0 +1,28 @@
+scraper:
+  url: "https://mon-vie-via.businessfrance.fr/offres"
+  filters:
+    zones:
+      - "AMERIQUE DU NORD"
+      - "ASIE ET PACIFIQUE"
+    domaines:
+      - "INFORMATIQUE SCIENTIFIQUE ET INDUSTRIELLE"
+      - "SYSTEMES ET LOGICIELS INFORMATIQUES"
+    type: "VIE"
+    niveau: "Bac+5 et plus"
+  headless: true
+  browser: "chrome"
+  page_load_timeout: 30
+  delay_between_pages: 3
+
+storage:
+  db_path: "offers.db"
+  notify_on_first_run: false  # empty DB -> record current offers silently
+
+notifications:
+  telegram:
+    enabled: true
+    token: ""
+    chat_id: ""
+  obsidian:
+    enabled: false
+    file_path: ""
